@@ -1,11 +1,15 @@
+
 import coordinates.Coordinates;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static mower.MowerOrientationEnum.getNewCoordinatesToTurnLeft;
 import static mower.MowerOrientationEnum.getNewCoordinatesToTurnRight;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(MockitoJUnitRunner.class)
 public class MowerOrientationEnumTest {
     private int x;
     private int y;

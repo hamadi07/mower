@@ -1,15 +1,31 @@
 import actions.MowerAction;
+import coordinates.Coordinates;
+import mower.Mower;
 import mower.MowerOrientationEnum;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import util.ConsoleOverride;
 
 import static mower.MowerOrientationEnum.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MowerActionTest {
+
+    @Mock
+    private ConsoleOverride console;
+
+    private Coordinates startPosition;
+
+    @Before
+    public void setUp() {
+        startPosition = new Coordinates(1, 2);
+    }
 
     @InjectMocks
     private MowerAction mowerAction;
@@ -24,12 +40,13 @@ public class MowerActionTest {
     }
 
     @Test
-    public void turnLeft_shouldReturnNull_whenOrientationIsNull() {
+    public void turnLeft_shouldReturnNull_whenOrientationIsNullAndPrintException() {
         //when
         MowerOrientationEnum returnedMowerOrientation = mowerAction.turnLeft(null);
 
         //then
         assertThat(returnedMowerOrientation).isNull();
+        verify(console).print("Invalid Orientation");
     }
 
     @Test
@@ -72,5 +89,67 @@ public class MowerActionTest {
 
         //then
         assertThat(returnedMowerOrientation).isNull();
+        verify(console).print("Invalid Orientation");
+    }
+
+    @Test
+    public void movingForward_shouldMovingMowerToNewPosition_whenDirectionIsNorth() {
+        //given
+        Mower mower = new Mower(NORTH, startPosition);
+
+        //when
+        mowerAction.movingForward(mower);
+
+        //then
+        assertThat(mower.getPosition().getX()).isEqualTo(1);
+        assertThat(mower.getPosition().getY()).isEqualTo(3);
+    }
+
+    @Test
+    public void movingForward_shouldMovingMowerToNewPosition_whenDirectionIsEast() {
+        //given
+        Mower mower = new Mower(EAST, startPosition);
+
+        //when
+        mowerAction.movingForward(mower);
+
+        //then
+        assertThat(mower.getPosition().getX()).isEqualTo(2);
+        assertThat(mower.getPosition().getY()).isEqualTo(2);
+    }
+
+    @Test
+    public void movingForward_shouldMovingMowerToNewPosition_whenDirectionIsWest() {
+        //given
+        Mower mower = new Mower(WEST, startPosition);
+
+        //when
+        mowerAction.movingForward(mower);
+
+        //then
+        assertThat(mower.getPosition().getX()).isEqualTo(0);
+        assertThat(mower.getPosition().getY()).isEqualTo(2);
+    }
+
+    @Test
+    public void movingForward_shouldMovingMowerToNewPosition_whenDirectionIsSud() {
+        //given
+        Mower mower = new Mower(SOUTH, startPosition);
+
+        //when
+        mowerAction.movingForward(mower);
+
+        //then
+        assertThat(mower.getPosition().getX()).isEqualTo(1);
+        assertThat(mower.getPosition().getY()).isEqualTo(1);
+    }
+
+    @Test
+    public void movingForward_shouldPrintException_whenMowerIsNull() {
+        //when
+        mowerAction.movingForward(null);
+
+        //then
+        verify(console).print("Invalid Mower");
     }
 }

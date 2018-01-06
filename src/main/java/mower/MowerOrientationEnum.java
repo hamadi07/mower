@@ -9,9 +9,9 @@ public enum MowerOrientationEnum {
     WEST("W", -1, 0),
     SOUTH("S", 0, -1);
 
-    String code;
-    int x;
-    int y;
+    private String code;
+    private int x;
+    private int y;
 
     MowerOrientationEnum(String code, int x, int y) {
         this.code = code;
