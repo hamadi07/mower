@@ -1,5 +1,6 @@
 import actions.MowerAction;
 import coordinates.Coordinates;
+import grid.Grid;
 import mower.Mower;
 import mower.MowerOrientationEnum;
 import org.junit.Before;
@@ -17,18 +18,20 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class MowerActionTest {
 
+    @InjectMocks
+    private MowerAction mowerAction;
+
     @Mock
     private ConsoleOverride console;
 
     private Coordinates startPosition;
+    private Grid grid;
 
     @Before
     public void setUp() {
         startPosition = new Coordinates(1, 2);
+        grid = new Grid(5, 5);
     }
-
-    @InjectMocks
-    private MowerAction mowerAction;
 
     @Test
     public void turnLeft_shouldReturnOrientation() {
@@ -98,7 +101,7 @@ public class MowerActionTest {
         Mower mower = new Mower(NORTH, startPosition);
 
         //when
-        mowerAction.movingForward(mower);
+        mowerAction.movingForward(mower, grid);
 
         //then
         assertThat(mower.getPosition().getX()).isEqualTo(1);
@@ -111,7 +114,7 @@ public class MowerActionTest {
         Mower mower = new Mower(EAST, startPosition);
 
         //when
-        mowerAction.movingForward(mower);
+        mowerAction.movingForward(mower, grid);
 
         //then
         assertThat(mower.getPosition().getX()).isEqualTo(2);
@@ -124,7 +127,7 @@ public class MowerActionTest {
         Mower mower = new Mower(WEST, startPosition);
 
         //when
-        mowerAction.movingForward(mower);
+        mowerAction.movingForward(mower, grid);
 
         //then
         assertThat(mower.getPosition().getX()).isEqualTo(0);
@@ -137,7 +140,7 @@ public class MowerActionTest {
         Mower mower = new Mower(SOUTH, startPosition);
 
         //when
-        mowerAction.movingForward(mower);
+        mowerAction.movingForward(mower, grid);
 
         //then
         assertThat(mower.getPosition().getX()).isEqualTo(1);
@@ -147,9 +150,36 @@ public class MowerActionTest {
     @Test
     public void movingForward_shouldPrintException_whenMowerIsNull() {
         //when
-        mowerAction.movingForward(null);
+        mowerAction.movingForward(null, null);
 
         //then
         verify(console).print("Invalid Mower");
+    }
+
+    @Test
+    public void movingForward_shouldNotMovingMowerToNewPosition_whenNewCellIsNotEmpty() {
+        //given
+        grid.getGrid()[1][1] = "N";
+        Mower mower = new Mower(SOUTH, startPosition);
+
+        //when
+        mowerAction.movingForward(mower, grid);
+
+        //then
+        assertThat(mower.getPosition()).isEqualTo(startPosition);
+    }
+
+    @Test
+    public void movingForward_shouldNotMovingMowerToNewPosition_whenNewCellIsOutOfBounds() {
+        //given
+        startPosition = new Coordinates(6, 6);
+        Mower mower = new Mower(SOUTH, startPosition);
+
+        //when
+        mowerAction.movingForward(mower, grid);
+
+        //then
+        assertThat(mower.getPosition()).isEqualTo(startPosition);
+        verify(console).print("The position [6][5] is out of bounds");
     }
 }

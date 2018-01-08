@@ -1,6 +1,7 @@
 package actions;
 
 import coordinates.Coordinates;
+import grid.Grid;
 import mower.Mower;
 import mower.MowerOrientationEnum;
 import util.ConsoleOverride;
@@ -9,6 +10,7 @@ import static mower.MowerOrientationEnum.*;
 
 public class MowerAction {
 
+    private static final String EMPTY = "V";
     private ConsoleOverride console;
 
     public MowerOrientationEnum turnLeft(MowerOrientationEnum orientation) {
@@ -31,24 +33,45 @@ public class MowerAction {
         }
     }
 
-    public void movingForward(Mower mower) {
+    public void movingForward(Mower mower, Grid grid) {
         try {
+
+            Coordinates mowerCurrentCoordinates = mower.getPosition();
+
             switch (mower.getOrientation()) {
                 case NORTH:
-                    mower.getPosition().setY(mower.getPosition().getY() + 1);
+                    updateMowerInformation(mower, grid, mowerCurrentCoordinates.getX(), mowerCurrentCoordinates.getY() + 1);
                     break;
                 case EAST:
-                    mower.getPosition().setX(mower.getPosition().getX() + 1);
+                    updateMowerInformation(mower, grid, mowerCurrentCoordinates.getX() + 1, mowerCurrentCoordinates.getY());
                     break;
                 case WEST:
-                    mower.getPosition().setX(mower.getPosition().getX() - 1);
+                    updateMowerInformation(mower, grid, mowerCurrentCoordinates.getX() - 1, mowerCurrentCoordinates.getY());
                     break;
                 case SOUTH:
-                    mower.getPosition().setY(mower.getPosition().getY() - 1);
+                    updateMowerInformation(mower, grid, mowerCurrentCoordinates.getX(), mowerCurrentCoordinates.getY() - 1);
                     break;
             }
         } catch (NullPointerException e) {
             console.print("Invalid Mower");
+        }
+    }
+
+    private void updateMowerInformation(Mower mower, Grid grid, int x, int y) {
+        Coordinates newCoordinates = new Coordinates(x, y);
+        String newCell = getNewCell(grid, newCoordinates);
+
+        if (newCell != null && newCell.equals(EMPTY)) {
+            mower.setPosition(newCoordinates);
+        }
+    }
+
+    private String getNewCell(Grid grid, Coordinates newCoordinates) {
+        try {
+            return grid.getGrid()[newCoordinates.getX()][newCoordinates.getY()];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            console.print("The position [" + newCoordinates.getX() + "][" + newCoordinates.getY() + "] is out of bounds");
+            return null;
         }
     }
 
