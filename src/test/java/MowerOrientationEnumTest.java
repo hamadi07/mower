@@ -1,13 +1,14 @@
 
 import coordinates.Coordinates;
+import mower.MowerOrientationEnum;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static mower.MowerOrientationEnum.getNewCoordinatesToTurnLeft;
-import static mower.MowerOrientationEnum.getNewCoordinatesToTurnRight;
+import static mower.MowerOrientationEnum.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.catchThrowable;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MowerOrientationEnumTest {
@@ -39,5 +40,23 @@ public class MowerOrientationEnumTest {
         assertThat(newCoordinatesToTurnLeft.getX()).isEqualTo(0);
         assertThat(newCoordinatesToTurnLeft.getY()).isEqualTo(-1);
 
+    }
+
+    @Test
+    public void getOrientationByCode_shouldReturnMowerOrientationEnum_whenCodeIsValid() {
+        //when
+        MowerOrientationEnum mowerOrientationEnum = getOrientationByCode("N");
+
+        //then
+        assertThat(mowerOrientationEnum).isEqualTo(NORTH);
+    }
+
+    @Test
+    public void getOrientationByCode_shouldThrowExecption_whenCodeIsValid() {
+        //when
+        Throwable throwable = catchThrowable(() -> getOrientationByCode("X"));
+
+        //then
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
     }
 }

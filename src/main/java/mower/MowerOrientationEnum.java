@@ -39,4 +39,13 @@ public enum MowerOrientationEnum {
     public static Coordinates getNewCoordinatesToTurnRight(int a, int b) {
         return new Coordinates(b, -a);
     }
+
+    public static MowerOrientationEnum getOrientationByCode(String code) {
+        for (MowerOrientationEnum mowerOrientationEnum : MowerOrientationEnum.values()) {
+            if (mowerOrientationEnum.code.equals(code)) {
+                return mowerOrientationEnum;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
 }
