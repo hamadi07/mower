@@ -1,4 +1,4 @@
-# mower
+# Mower
 Entretien XEBIA
 Test avec mockito 
 
@@ -34,6 +34,7 @@ output :
 1==> V|V|V|V|V|E| 
 0==> V|V|V|V|V|V| 
 
+(V : vide)
 
 </pre>
 
