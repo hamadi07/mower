@@ -33,7 +33,11 @@ public class DemoController {
     public void testApplication(String path) throws IOException {
         List<String> listInstructionFromFile = instructionService.getListInstructionFromFile(path);
         Grid grid = gridService.createGrid(listInstructionFromFile);
+        executionOfinstructions(listInstructionFromFile, grid);
+        gridService.showGrid(grid);
+    }
 
+    private void executionOfinstructions(List<String> listInstructionFromFile, Grid grid) {
         int instructionIndice = 1;
         while (instructionIndice <= listInstructionFromFile.size() - 1) {
             String[] mowerInformation = listInstructionFromFile.get(instructionIndice).split(REGEX);
@@ -45,6 +49,5 @@ public class DemoController {
 
             consoleOverride.print(mower.getPosition().getX() + "," + mower.getPosition().getY() + " " + mower.getOrientation().getCode());
         }
-        gridService.showGrid(grid);
     }
 }
