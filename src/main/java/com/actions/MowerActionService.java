@@ -1,17 +1,27 @@
-package actions;
+package com.actions;
 
-import coordinates.Coordinates;
-import grid.Grid;
-import mower.Mower;
-import mower.MowerOrientationEnum;
-import util.ConsoleOverride;
+import com.component.coordinates.Coordinates;
+import com.component.grid.Grid;
+import com.component.mower.Mower;
+import com.component.mower.MowerOrientationEnum;
+import com.util.ConsoleOverride;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import static mower.MowerOrientationEnum.*;
+import static com.component.mower.MowerOrientationEnum.*;
 
-public class MowerAction {
+@Service
+public class MowerActionService {
 
-    private static final String EMPTY = "V";
+    @Autowired
     private ConsoleOverride console;
+    private static final String EMPTY = "V";
+
+    public Mower createMower(String[] mowerStartPosition) {
+        MowerOrientationEnum startOrientation = getOrientationByCode(mowerStartPosition[2]);
+        Coordinates startCoordinates = getCoordinateFromString(mowerStartPosition);
+        return new Mower(startOrientation, startCoordinates);
+    }
 
     public MowerOrientationEnum turnLeft(MowerOrientationEnum orientation) {
         try {
@@ -57,6 +67,28 @@ public class MowerAction {
         }
     }
 
+    public void movingMower(Grid grid, Mower mower, String instructions) {
+        int instructionEvent = 0;
+        while (instructionEvent <= instructions.length() - 1) {
+
+            switch (instructions.charAt(instructionEvent)) {
+                case 'G': {
+                    mower.setOrientation(turnLeft(mower.getOrientation()));
+                    break;
+                }
+                case 'D': {
+                    mower.setOrientation(turnRight(mower.getOrientation()));
+                    break;
+                }
+                case 'A': {
+                    movingForward(mower, grid);
+                    break;
+                }
+            }
+            instructionEvent++;
+        }
+    }
+
     private void updateMowerInformation(Mower mower, Grid grid, int x, int y) {
         Coordinates newCoordinates = new Coordinates(x, y);
         String newCell = getNewCell(grid, newCoordinates);
@@ -73,6 +105,12 @@ public class MowerAction {
             console.print("The position [" + newCoordinates.getX() + "][" + newCoordinates.getY() + "] is out of bounds");
             return null;
         }
+    }
+
+    private Coordinates getCoordinateFromString(String[] coodinates) {
+        int x = Integer.valueOf(coodinates[0]);
+        int y = Integer.valueOf(coodinates[1]);
+        return new Coordinates(x, y);
     }
 
     private MowerOrientationEnum getMowerOrientationFromCoordinates(int x, int y) {

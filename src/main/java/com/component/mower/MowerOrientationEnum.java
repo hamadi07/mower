@@ -1,6 +1,6 @@
-package mower;
+package com.component.mower;
 
-import coordinates.Coordinates;
+import com.component.coordinates.Coordinates;
 
 public enum MowerOrientationEnum {
 

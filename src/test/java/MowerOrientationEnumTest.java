@@ -1,12 +1,12 @@
 
-import coordinates.Coordinates;
-import mower.MowerOrientationEnum;
+import com.component.coordinates.Coordinates;
+import com.component.mower.MowerOrientationEnum;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static mower.MowerOrientationEnum.*;
+import static com.component.mower.MowerOrientationEnum.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Java6Assertions.catchThrowable;
 

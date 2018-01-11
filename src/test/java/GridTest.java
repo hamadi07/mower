@@ -1,12 +1,12 @@
-import coordinates.Coordinates;
-import grid.Grid;
-import mower.Mower;
+import com.component.coordinates.Coordinates;
+import com.component.grid.Grid;
+import com.component.mower.Mower;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static mower.MowerOrientationEnum.SOUTH;
+import static com.component.mower.MowerOrientationEnum.SOUTH;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
