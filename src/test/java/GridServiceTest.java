@@ -16,7 +16,7 @@ import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 public class GridServiceTest {
 
     @InjectMocks
-    GridService gridService;
+    private GridService gridService;
 
     @Test
     public void createGride_shouldCreateGridFromFile() {
