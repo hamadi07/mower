@@ -7,7 +7,7 @@ Pour éxecuter l'application lancer DemoControllerTest.
 ###### Exemple d'exécution :
 
 <pre>
- input : 
+input : 
 
 5 5
 1 2 N 
@@ -19,7 +19,7 @@ AADAADADDA
 3 3 E
 AADAADADDA
 
-####### output : 
+output : 
 
 1,3 N
 5,1 E
